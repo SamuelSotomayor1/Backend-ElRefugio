@@ -1,0 +1,42 @@
+import { prisma } from "../config/db";
+import { Reservation, Prisma } from "@prisma/client";
+
+// Obtener todas las reservas
+export const getAll = async (): Promise<Reservation[]> => {
+  return await prisma.reservation.findMany();
+};
+
+// Crear nueva reserva
+export const createNewReservation = async (
+  data: Prisma.ReservationCreateInput
+): Promise<Reservation> => {
+  return await prisma.reservation.create({ data });
+};
+
+// Verificar si existe una reserva por ID
+export const existsReservation = async (id: number): Promise<boolean> => {
+  const reservation = await prisma.reservation.findUnique({
+    where: { id },
+  });
+  return Boolean(reservation);
+};
+
+// Actualizar reserva por ID
+export const updateReservationById = async (
+  id: number,
+  data: Prisma.ReservationUpdateInput
+): Promise<Reservation> => {
+  return await prisma.reservation.update({
+    where: { id },
+    data,
+  });
+};
+
+// Eliminar reserva por ID
+export const deleteReservationById = async (
+  id: number
+): Promise<Reservation> => {
+  return await prisma.reservation.delete({
+    where: { id },
+  });
+};
