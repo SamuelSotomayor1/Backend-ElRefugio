@@ -8,7 +8,7 @@ export const getAll = async (): Promise<Reservation[]> => {
 
 // Crear nueva reserva
 export const createNewReservation = async (
-  data: Prisma.ReservationCreateInput
+  data: Prisma.ReservationUncheckedCreateInput
 ): Promise<Reservation> => {
   return await prisma.reservation.create({ data });
 };
@@ -24,7 +24,7 @@ export const existsReservation = async (id: number): Promise<boolean> => {
 // Actualizar reserva por ID
 export const updateReservationById = async (
   id: number,
-  data: Prisma.ReservationUpdateInput
+  data: Prisma.ReservationUncheckedUpdateInput
 ): Promise<Reservation> => {
   return await prisma.reservation.update({
     where: { id },

@@ -4,7 +4,7 @@ import { sendResponse } from "../utils/utils";
 import { CustomError } from "../middlewares/errorHandler";
 
 
-export class TalbeController {
+export class TableController {
   public getTable = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const tables = await getAllTables();

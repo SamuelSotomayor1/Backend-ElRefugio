@@ -4,6 +4,7 @@ import { CustomError, errorHandler } from "./middlewares/errorHandler"
 import { ConnectDB } from "./config/db"
 import { envConfig } from "./config/env"
 import { reservationRouter } from "./routes/reservation.route"
+import { tableRouter } from "./routes/table.route"
 
 const app = express()
 
@@ -19,6 +20,7 @@ app.use(json())
  * Routes
  */
 app.use("/api/reservation", reservationRouter)
+app.use("/api/table", tableRouter)
 
 /**
  * Middlewares

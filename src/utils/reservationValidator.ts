@@ -10,6 +10,7 @@ export const ReservationSchema = z.object({
     message: "Formato de fecha inválido"
   }),
   time: z.string().min(1, "Hora es obligatoria"),
+  tableId: z.number().refine(val => val !== undefined, { message: "tableId es obligatorio" })
 });
 
 // Schema para actualizar una reserva
@@ -22,6 +23,7 @@ export const UpdateReservationSchema = z.object({
     message: "Formato de fecha inválido"
   }),
   time: z.string().optional(),
+  tableId: z.number().optional() // ✅ agregado como opcional
 })
   .strict()
   .refine((data) => Object.keys(data).length > 0, {
