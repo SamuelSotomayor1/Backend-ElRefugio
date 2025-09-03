@@ -1,5 +1,5 @@
 import { CustomError } from "../middlewares/errorHandler";
-import { createNewReservation, deleteReservationById, existsReservation, getAll, updateReservationById } from "../repositories/reservation.repo";
+import { createNewReservation, deleteReservationById, existsReservation, existsReservationAtDateTime, getAll, updateReservationById } from "../repositories/reservation.repo";
 import { ReservationSchema, UpdateReservationSchema } from "../utils/reservationValidator";
 
 export const getAllReservations = async () => {
@@ -19,6 +19,12 @@ export const createReservation = async (body: any) => {
   if (!parsedData.success) {
     const message = parsedData.error.issues.map((issue) => issue.message);
     throw new CustomError("Error de validación", 400, message);
+  }
+
+  // Validación: no puede haber reserva en la misma fecha y hora
+  const exists = await existsReservationAtDateTime(parsedData.data.date, parsedData.data.time);
+  if (exists) {
+    throw new CustomError("Reserva duplicada", 400, ["Ya existe una reserva en esa fecha y hora"]);
   }
 
   const newReservation = await createNewReservation(parsedData.data);

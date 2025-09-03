@@ -21,6 +21,23 @@ export const existsReservation = async (id: number): Promise<boolean> => {
   return Boolean(reservation);
 };
 
+// Verificar si existe una reserva en la misma fecha y hora
+export const existsReservationAtDateTime = async (
+  date: string | Date,
+  time: string,
+  tableId?: number
+): Promise<boolean> => {
+  const reservation = await prisma.reservation.findFirst({
+    where: {
+      date: new Date(date),
+      time,
+      ...(tableId ? { tableId } : {}),
+    },
+  });
+
+  return Boolean(reservation);
+};
+
 // Actualizar reserva por ID
 export const updateReservationById = async (
   id: number,
