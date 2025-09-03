@@ -1,5 +1,5 @@
 import { CustomError } from "../middlewares/errorHandler";
-import { createNewReservation, deleteReservationById, existsReservation, existsReservationAtDateTime, getAll, updateReservationById } from "../repositories/reservation.repo";
+import { createNewReservation, deleteReservationById, existsReservation, existsReservationAtDateTime, getAll, getAvailableTables, updateReservationById } from "../repositories/reservation.repo";
 import { ReservationSchema, UpdateReservationSchema } from "../utils/reservationValidator";
 
 export const getAllReservations = async () => {
@@ -26,6 +26,14 @@ export const createReservation = async (body: any) => {
   if (exists) {
     throw new CustomError("Reserva duplicada", 400, ["Ya existe una reserva en esa fecha y hora"]);
   }
+
+  const availableTables = await getAvailableTables(parsedData.data.date, parsedData.data.time);
+  if (availableTables.length === 0) {
+    throw new CustomError("No hay mesas disponibles", 400, ["No hay mesas disponibles para esa fecha y hora"]);
+  }
+
+  // Asignar mesa automáticamente
+  parsedData.data.tableId = availableTables[0].id;
 
   const newReservation = await createNewReservation(parsedData.data);
   return newReservation;

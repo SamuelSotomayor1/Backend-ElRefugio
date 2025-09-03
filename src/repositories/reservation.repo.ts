@@ -6,6 +6,18 @@ export const getAll = async (): Promise<Reservation[]> => {
   return await prisma.reservation.findMany();
 };
 
+// Obtener mesas disponibles
+export const getAvailableTables = async (date: string, time: string) => {
+  const tables = await prisma.table.findMany({
+    where: {
+      reservations: {
+        none: { date, time },
+      },
+    },
+  });
+  return tables;
+};
+
 // Crear nueva reserva
 export const createNewReservation = async (
   data: Prisma.ReservationUncheckedCreateInput
